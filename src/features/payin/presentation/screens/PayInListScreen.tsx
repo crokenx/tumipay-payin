@@ -34,6 +34,7 @@ export const PayInListScreen: React.FC<PayInListScreenProps> = ({
   const { listPayIns, payins, loading, error, clearError } = usePayInStore();
   const [refreshing, setRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [searchId, setSearchId] = useState('');
 
   useEffect(() => {
     loadPayIns();
@@ -56,9 +57,11 @@ export const PayInListScreen: React.FC<PayInListScreenProps> = ({
     }
   };
 
-  const filteredPayins = filterStatus
-    ? payins.filter((p) => p.status === filterStatus)
-    : payins;
+  const filteredPayins = payins.filter((p) => {
+    const matchesStatus = !filterStatus || p.status === filterStatus;
+    const matchesId = !searchId || p.id.toLowerCase().includes(searchId.toLowerCase());
+    return matchesStatus && matchesId;
+  });
 
   const handlePayInPress = (payInId: string) => {
     console.log('Selected PayIn ID:', payInId);
@@ -104,6 +107,17 @@ export const PayInListScreen: React.FC<PayInListScreenProps> = ({
           />
         </View>
       )}
+
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search by Transaction ID"
+          placeholderTextColor="#999"
+          value={searchId}
+          onChangeText={setSearchId}
+          editable={!loading}
+        />
+      </View>
 
       <View style={styles.filterContainer}>
         <ScrollView
@@ -218,6 +232,23 @@ const styles = StyleSheet.create({
   errorContainer: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+  },
+  searchContainer: {
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEEEE',
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 14,
+    backgroundColor: '#F8F9FA',
+    color: '#333',
   },
   filterContainer: {
     backgroundColor: 'white',
