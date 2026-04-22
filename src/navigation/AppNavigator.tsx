@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CreatePayInScreen } from '../features/payin/presentation/screens/CreatePayInScreen';
 import { PayInDetailScreen } from '../features/payin/presentation/screens/PayInDetailScreen';
 import { PayInListScreen } from '../features/payin/presentation/screens/PayInListScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type RootStackParamList = {
   MainTabs: undefined;
@@ -93,10 +94,12 @@ const TabNavigator = () => {
 
 export const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="MainTabs" component={TabNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="MainTabs" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 };

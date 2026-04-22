@@ -49,10 +49,10 @@ export class PayInMockAdapter implements IPayInRepository {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const newId = `payin-${Date.now()}`;
+    const new_id = `payin-${Date.now()}`;
 
-    const newPayin: PayIn = {
-      id: newId,
+    const new_payin: PayIn = {
+      id: new_id,
       customer_id: request.customer_id,
       amount: request.amount,
       currency: request.currency,
@@ -63,9 +63,9 @@ export class PayInMockAdapter implements IPayInRepository {
       updated_at: new Date().toISOString(),
     }
 
-    MOCK_PAYINS[newId] = newPayin;
-    
-    return newPayin;
+    MOCK_PAYINS[new_id] = new_payin;
+
+    return new_payin;
   }
 
   async getPayInById(id: string): Promise<PayIn> {
@@ -79,13 +79,13 @@ export class PayInMockAdapter implements IPayInRepository {
     return payin;
   }
 
-  async listPayIns(customerId: string): Promise<PayIn[]> {
-    console.log(`Mock API: Listing PayIns for customer_id=${customerId}`);
+  async listPayIns(customer_id: string): Promise<PayIn[]> {
+    console.log(`Mock API: Listing PayIns for customer_id=${customer_id}`);
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 400));
 
     return Object.values(MOCK_PAYINS).filter(
-      (p) => p.customer_id === customerId
+      (p) => p.customer_id === customer_id
     );
   }
 }

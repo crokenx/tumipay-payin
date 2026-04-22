@@ -1,4 +1,3 @@
-// HTTP Client - Infrastructure layer
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
