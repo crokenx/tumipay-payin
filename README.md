@@ -203,9 +203,9 @@ REACT_APP_USE_MOCK_API=false npx expo start
 
 ### Mock Data
 The `PayInMockAdapter` includes sample transactions simulating network delays:
-- **payin-001**: 1000 USD - PROCESSED ✓
-- **payin-002**: 500 USD - VALIDATED ⏳
-- **payin-003**: 2500 USD - FAILED ✗ (with error message)
+- **payin-001**: 1000 USD - PROCESSED 
+- **payin-002**: 500 USD - VALIDATED 
+- **payin-003**: 2500 USD - FAILED (with error message)
 
 ## Assumptions
 
@@ -242,13 +242,13 @@ The `PayInMockAdapter` includes sample transactions simulating network delays:
 
 ### Current Mitigations Implemented
 
-✅ Comprehensive error handling  
-✅ Loading state management  
-✅ Validation before submission  
-✅ Type-safe API contracts  
-✅ Dependency injection for testability  
-✅ Mock adapter for development  
-✅ Empty state UI  
+- Comprehensive error handling  
+- Loading state management  
+- Validation before submission  
+- Type-safe API contracts  
+- Dependency injection for testability  
+- Mock adapter for development  
+- Empty state UI  
 
 ## Code Quality
 
