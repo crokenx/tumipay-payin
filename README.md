@@ -375,9 +375,15 @@ npm run android
 5. **Localization**: Multi-language support
 6. **Accessibility**: a11y improvements (WCAG compliance)
 7. **Pagination**: Handle large transaction lists efficiently
-8. **Token Refresh**: Auto-refresh mechanism for expired auth tokens
-9. **Biometric Auth**: Face ID / Touch ID support
-10. **Dark Mode**: Theme support
+8. **Dark Mode**: Theme support
+
+## Demo iOS
+
+https://github.com/user-attachments/assets/dfd2453c-16fd-4363-8242-be16ae7be156
+
+## Demo Android
+
+https://github.com/user-attachments/assets/116d23b4-7e65-455c-9583-989800303860
 
 ## Troubleshooting
 
