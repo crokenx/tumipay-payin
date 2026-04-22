@@ -50,7 +50,8 @@ export class PayInMockAdapter implements IPayInRepository {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const newId = `payin-${Date.now()}`;
-    return {
+
+    const newPayin: PayIn = {
       id: newId,
       customer_id: request.customer_id,
       amount: request.amount,
@@ -60,7 +61,11 @@ export class PayInMockAdapter implements IPayInRepository {
       description: request.description,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    };
+    }
+
+    MOCK_PAYINS[newId] = newPayin;
+    
+    return newPayin;
   }
 
   async getPayInById(id: string): Promise<PayIn> {

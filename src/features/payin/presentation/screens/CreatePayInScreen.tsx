@@ -32,9 +32,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
     description: '',
   });
 
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};

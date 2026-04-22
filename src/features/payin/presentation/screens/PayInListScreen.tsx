@@ -10,9 +10,16 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { usePayInStore } from '../store/usePayInStore';
 import { PayInCard } from '../components/PayInCard';
 import { EmptyState, ErrorMessage, LoadingOverlay } from '../../../../shared';
+
+type PayInStackNavigationProp = NativeStackNavigationProp<{
+  PayInList: undefined;
+  PayInDetail: { payInId: string };
+}>;
 
 interface PayInListScreenProps {
   customerId?: string;
@@ -23,6 +30,7 @@ export const PayInListScreen: React.FC<PayInListScreenProps> = ({
   customerId = 'cust-123', // Default for demo
   onSelectPayIn,
 }) => {
+  const navigation = useNavigation<PayInStackNavigationProp>();
   const { listPayIns, payins, loading, error, clearError } = usePayInStore();
   const [refreshing, setRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
@@ -53,7 +61,14 @@ export const PayInListScreen: React.FC<PayInListScreenProps> = ({
     : payins;
 
   const handlePayInPress = (payInId: string) => {
-    onSelectPayIn?.(payInId);
+    console.log('Selected PayIn ID:', payInId);
+    if (onSelectPayIn) {
+      // If onSelectPayIn callback is provided, use it (for external usage)
+      onSelectPayIn(payInId);
+    } else {
+      // Otherwise, navigate to the detail screen
+      navigation.navigate('PayInDetail', { payInId });
+    }
   };
 
   const statuses = [

@@ -9,9 +9,15 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { usePayInStore } from '../store/usePayInStore';
 import { PayInStatusBadge } from '../components/PayInStatusBadge';
 import { EmptyState, ErrorMessage, LoadingOverlay } from '../../../../shared';
+
+type PayInDetailRouteProp = RouteProp<{
+  PayInDetail: { payInId: string };
+}, 'PayInDetail'>;
 
 interface PayInDetailScreenProps {
   payInId?: string;
@@ -20,16 +26,19 @@ interface PayInDetailScreenProps {
 export const PayInDetailScreen: React.FC<PayInDetailScreenProps> = ({
   payInId: initialPayInId,
 }) => {
+  const route = useRoute<PayInDetailRouteProp>();
+  const routePayInId = route.params?.payInId;
   const { getPayInById, currentPayIn, loading, error, clearError } =
     usePayInStore();
-  const [searchId, setSearchId] = useState(initialPayInId || 'payin-001');
+  const [searchId, setSearchId] = useState(routePayInId || initialPayInId || 'payin-001');
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialPayInId) {
-      loadPayIn(initialPayInId);
+    if (routePayInId || initialPayInId) {
+      const idToLoad = routePayInId || initialPayInId;
+      loadPayIn(idToLoad!);
     }
-  }, [initialPayInId]);
+  }, [routePayInId, initialPayInId]);
 
   const loadPayIn = async (id: string) => {
     setFetchError(null);

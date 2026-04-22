@@ -3,6 +3,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import { CreatePayInScreen } from '../features/payin/presentation/screens/CreatePayInScreen';
 import { PayInDetailScreen } from '../features/payin/presentation/screens/PayInDetailScreen';
 import { PayInListScreen } from '../features/payin/presentation/screens/PayInListScreen';
@@ -71,6 +72,9 @@ const TabNavigator = () => {
         component={PayInNavigator}
         options={{
           tabBarLabel: 'Transactions',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
@@ -78,6 +82,9 @@ const TabNavigator = () => {
         component={CreatePayInScreen}
         options={{
           tabBarLabel: 'Create',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle" color={color} size={size} />
+          ),
         }}
       />
     </Tab.Navigator>
