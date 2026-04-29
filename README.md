@@ -383,7 +383,7 @@ Tests the complete transaction creation workflow:
 - ✅ UI updates after successful creation
 - ✅ Navigation flows properly
 
-##### 2. **Demo Create Transaction Flow** (`home.yaml`)
+##### 2. **Demo Create Transaction Flow** (`create_transaction.yaml`)
 
 https://github.com/user-attachments/assets/52d6c415-fa7e-4d3d-b35c-97bb99869033
 
