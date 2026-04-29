@@ -258,6 +258,61 @@ npm run lint       # Run ESLint
 npm run format     # Format with Prettier
 ```
 
+### Unit & Coverage Testing with Jest
+
+Jest is used for unit, component, infrastructure, screen, and shared utility tests. React Native UI tests use `@testing-library/react-native`.
+
+#### Setup
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Verify the test dependencies are installed**:
+   ```bash
+   npm ls jest jest-expo @testing-library/react-native react-test-renderer
+   ```
+
+3. **Use the mock adapter for local tests**:
+   The PayIn store currently defaults to `PayInMockAdapter`, so tests can run without a backend or network access.
+
+#### Running Tests
+
+Run the full Jest suite:
+
+```bash
+npm test -- --runInBand --no-watchman
+```
+
+Run the suite with coverage:
+
+```bash
+npm test -- --coverage --runInBand --no-watchman
+```
+
+Run a specific test file:
+
+```bash
+npm test -- __tests__/infrastructure/payInMockAdapter.test.ts --runInBand --no-watchman
+```
+
+Run a folder of tests:
+
+```bash
+npm test -- __tests__/screens --runInBand --no-watchman
+```
+
+Use `--no-watchman` if Watchman has local permission issues or is not installed. If Watchman works normally on your machine, it can be omitted.
+
+#### Test Coverage Areas
+
+- `__tests__/useCases`: application use cases and validation paths
+- `__tests__/infrastructure`: API adapters and HTTP client behavior
+- `__tests__/screens`: screen rendering, form validation, loading/error/empty states, navigation callbacks
+- `__tests__/shared`: shared utilities such as error handling
+- Root component tests: reusable presentation components such as `PayInCard` and `PayInStatusBadge`
+
 ### End-to-End Testing with Maestro
 
 Maestro is used for mobile UI testing and automation to verify complete user workflows across the app.
