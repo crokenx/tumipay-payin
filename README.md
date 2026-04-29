@@ -313,6 +313,10 @@ Use `--no-watchman` if Watchman has local permission issues or is not installed.
 - `__tests__/shared`: shared utilities such as error handling
 - Root component tests: reusable presentation components such as `PayInCard` and `PayInStatusBadge`
 
+#### Test coverage result
+
+<img width="924" height="648" alt="Screenshot 2026-04-29 at 8 34 12 AM" src="https://github.com/user-attachments/assets/958ee926-80c4-452f-9e45-ec18ff405142" />
+
 ### End-to-End Testing with Maestro
 
 Maestro is used for mobile UI testing and automation to verify complete user workflows across the app.
