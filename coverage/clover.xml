@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777469439860" clover="3.2.0">
-  <project timestamp="1777469439860" name="All files">
+<coverage generated="1777470458300" clover="3.2.0">
+  <project timestamp="1777470458300" name="All files">
     <metrics statements="221" coveredstatements="220" conditionals="164" coveredconditionals="161" methods="73" coveredmethods="73" elements="458" coveredelements="454" complexity="0" loc="221" ncloc="221" packages="10" files="18" classes="18"/>
     <package name="features.payin">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -84,7 +84,7 @@
         <line num="83" count="15" type="stmt"/>
         <line num="85" count="15" type="stmt"/>
         <line num="87" count="15" type="stmt"/>
-        <line num="88" count="199" type="stmt"/>
+        <line num="88" count="214" type="stmt"/>
       </file>
     </package>
     <package name="features.payin.infrastructure.http">

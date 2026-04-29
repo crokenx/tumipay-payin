@@ -5,10 +5,19 @@ import {
   PayInStatus,
   CreatePayInRequest,
 } from '../../src/features/payin/domain/entities/PayIn';
+import { AxiosResponse } from 'axios';
 import { ApiError } from '../../src/shared';
 
 jest.mock('../../src/features/payin/infrastructure/http/httpClient');
 const mockedHttpClient = httpClient as jest.Mocked<typeof httpClient>;
+
+const axiosResponse = <T,>(data: T): AxiosResponse<T> => ({
+  data,
+  status: 200,
+  statusText: 'OK',
+  headers: {},
+  config: {} as AxiosResponse<T>['config'],
+});
 
 const createAxiosError = (
   status: number | undefined,
@@ -41,19 +50,17 @@ describe('PayInApiAdapter', () => {
       description: 'Test payment',
     };
 
-    const mockResponse = {
-      data: {
-        id: 'payin-001',
-        customer_id: 'cust-123',
-        amount: 500,
-        currency: 'USD',
-        payment_method: 'credit_card',
-        description: 'Test payment',
-        status: PayInStatus.CREATED,
-        created_at: '2026-04-29T10:00:00Z',
-        updated_at: '2026-04-29T10:00:00Z',
-      },
-    };
+    const mockResponse = axiosResponse({
+      id: 'payin-001',
+      customer_id: 'cust-123',
+      amount: 500,
+      currency: 'USD',
+      payment_method: 'credit_card',
+      description: 'Test payment',
+      status: PayInStatus.CREATED,
+      created_at: '2026-04-29T10:00:00Z',
+      updated_at: '2026-04-29T10:00:00Z',
+    });
 
     test('successfully creates a PayIn via API', async () => {
       mockedHttpClient.post.mockResolvedValue(mockResponse);
@@ -80,7 +87,7 @@ describe('PayInApiAdapter', () => {
       const amounts = [100, 500, 1000, 5000];
 
       for (const amount of amounts) {
-        const response = { ...mockResponse, data: { ...mockResponse.data, amount } };
+        const response = axiosResponse({ ...mockResponse.data, amount });
         mockedHttpClient.post.mockResolvedValue(response);
 
         const result = await adapter.createPayIn({ ...mockRequest, amount });
@@ -93,7 +100,7 @@ describe('PayInApiAdapter', () => {
       const currencies = ['USD', 'EUR', 'GBP', 'JPY'];
 
       for (const currency of currencies) {
-        const response = { ...mockResponse, data: { ...mockResponse.data, currency } };
+        const response = axiosResponse({ ...mockResponse.data, currency });
         mockedHttpClient.post.mockResolvedValue(response);
 
         const result = await adapter.createPayIn({ ...mockRequest, currency });
@@ -106,10 +113,16 @@ describe('PayInApiAdapter', () => {
       const methods = ['credit_card', 'bank_transfer', 'paypal', 'wallet'];
 
       for (const method of methods) {
-        const response = { ...mockResponse, data: { ...mockResponse.data, payment_method: method } };
+        const response = axiosResponse({
+          ...mockResponse.data,
+          payment_method: method,
+        });
         mockedHttpClient.post.mockResolvedValue(response);
 
-        const result = await adapter.createPayIn({ ...mockRequest, payment_method: method });
+        const result = await adapter.createPayIn({
+          ...mockRequest,
+          payment_method: method,
+        });
 
         expect(result.payment_method).toBe(method);
       }
@@ -118,10 +131,16 @@ describe('PayInApiAdapter', () => {
     test('includes optional description in request', async () => {
       mockedHttpClient.post.mockResolvedValue(mockResponse);
 
-      const requestWithDescription = { ...mockRequest, description: 'Custom description' };
+      const requestWithDescription = {
+        ...mockRequest,
+        description: 'Custom description',
+      };
       await adapter.createPayIn(requestWithDescription);
 
-      expect(mockedHttpClient.post).toHaveBeenCalledWith('/payins', requestWithDescription);
+      expect(mockedHttpClient.post).toHaveBeenCalledWith(
+        '/payins',
+        requestWithDescription
+      );
     });
 
     test('throws ApiError when POST fails', async () => {
@@ -166,7 +185,7 @@ describe('PayInApiAdapter', () => {
       updated_at: '2026-04-29T10:05:00Z',
     };
 
-    const mockResponse = { data: mockPayIn };
+    const mockResponse = axiosResponse(mockPayIn);
 
     test('successfully retrieves a PayIn by id', async () => {
       mockedHttpClient.get.mockResolvedValue(mockResponse);
@@ -207,7 +226,7 @@ describe('PayInApiAdapter', () => {
       ];
 
       for (const status of statuses) {
-        const response = { data: { ...mockPayIn, status } };
+        const response = axiosResponse({ ...mockPayIn, status });
         mockedHttpClient.get.mockResolvedValue(response);
 
         const result = await adapter.getPayInById('payin-001');
@@ -222,7 +241,7 @@ describe('PayInApiAdapter', () => {
         status: PayInStatus.FAILED,
         error_message: 'Card declined',
       };
-      mockedHttpClient.get.mockResolvedValue({ data: failedPayIn });
+      mockedHttpClient.get.mockResolvedValue(axiosResponse(failedPayIn));
 
       const result = await adapter.getPayInById('payin-001');
 
@@ -293,7 +312,7 @@ describe('PayInApiAdapter', () => {
       },
     ];
 
-    const mockResponse = { data: { data: mockPayIns } };
+    const mockResponse = axiosResponse({ data: mockPayIns });
 
     test('successfully lists PayIns for a customer', async () => {
       mockedHttpClient.get.mockResolvedValue(mockResponse);
@@ -317,7 +336,7 @@ describe('PayInApiAdapter', () => {
     });
 
     test('returns empty array when customer has no PayIns', async () => {
-      mockedHttpClient.get.mockResolvedValue({ data: { data: [] } });
+      mockedHttpClient.get.mockResolvedValue(axiosResponse({ data: [] }));
 
       const result = await adapter.listPayIns('cust-123');
 
@@ -347,9 +366,9 @@ describe('PayInApiAdapter', () => {
           PayInStatus.PROCESSED,
         ][i],
       }));
-      mockedHttpClient.get.mockResolvedValue({
-        data: { data: payInsWithStatuses },
-      });
+      mockedHttpClient.get.mockResolvedValue(
+        axiosResponse({ data: payInsWithStatuses })
+      );
 
       const result = await adapter.listPayIns('cust-123');
 
@@ -362,9 +381,9 @@ describe('PayInApiAdapter', () => {
         ...p,
         currency: ['USD', 'EUR'][i],
       }));
-      mockedHttpClient.get.mockResolvedValue({
-        data: { data: payInsWithCurrencies },
-      });
+      mockedHttpClient.get.mockResolvedValue(
+        axiosResponse({ data: payInsWithCurrencies })
+      );
 
       const result = await adapter.listPayIns('cust-123');
 
@@ -386,7 +405,9 @@ describe('PayInApiAdapter', () => {
         ...mockPayIns[0],
         id: `payin-${i}`,
       }));
-      mockedHttpClient.get.mockResolvedValue({ data: { data: manyPayIns } });
+      mockedHttpClient.get.mockResolvedValue(
+        axiosResponse({ data: manyPayIns })
+      );
 
       const result = await adapter.listPayIns('cust-123');
 
