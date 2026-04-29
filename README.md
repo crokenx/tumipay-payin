@@ -258,12 +258,6 @@ npm run lint       # Run ESLint
 npm run format     # Format with Prettier
 ```
 
-### Testing Strategy (Conceptual)
-- **Unit Tests**: Use cases, utilities, error handlers
-- **Component Tests**: Screen and component rendering with React Testing Library
-- **Integration Tests**: Store + API adapter interactions
-- **End-to-End**: Navigation flows with Maestro
-
 ### End-to-End Testing with Maestro
 
 Maestro is used for mobile UI testing and automation to verify complete user workflows across the app.
@@ -300,7 +294,6 @@ Maestro is used for mobile UI testing and automation to verify complete user wor
 3. **Run a specific test**:
    ```bash
    maestro test maestro/create_transaction.yaml
-   maestro test maestro/home.yaml
    ```
 
 4. **Run with verbose output**:
@@ -331,11 +324,10 @@ Tests the complete transaction creation workflow:
 - ✅ UI updates after successful creation
 - ✅ Navigation flows properly
 
-##### 2. **Home Screen Flow** (`home.yaml`)
-Basic smoke test for the home screen:
-- Launches app
-- Verifies Transactions list is visible
-- Confirms app loads without errors
+##### 2. **Demo Create Transaction Flow** (`home.yaml`)
+
+https://github.com/user-attachments/assets/52d6c415-fa7e-4d3d-b35c-97bb99869033
+
 
 #### Key Features of Maestro Tests
 
