@@ -110,6 +110,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
         <View style={styles.formGroup}>
           <Label text="Customer ID" required />
           <TextInput
+            testID='input-customer-id'
             style={[
               styles.input,
               validationErrors.customer_id && styles.inputError,
@@ -130,6 +131,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
           <Label text="Amount" required />
           <View style={styles.amountRow}>
             <TextInput
+            testID='input-amount'
               style={[
                 styles.input,
                 styles.amountInput,
@@ -169,6 +171,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
         <View style={styles.formGroup}>
           <Label text="Payment Method" required />
           <TextInput
+            testID='input-payment-method'
             style={[
               styles.input,
               validationErrors.payment_method && styles.inputError,
@@ -190,6 +193,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
         <View style={styles.formGroup}>
           <Label text="Description" />
           <TextInput
+            testID='input-description'
             style={[styles.input, styles.textArea]}
             placeholder="Optional description"
             value={formData.description || ''}
@@ -203,6 +207,7 @@ export const CreatePayInScreen: React.FC<CreatePayInScreenProps> = ({
         </View>
 
         <TouchableOpacity
+          testID='btn-create-payment'
           style={[styles.submitButton, loading && styles.submitButtonDisabled]}
           onPress={handleCreatePayIn}
           disabled={loading}

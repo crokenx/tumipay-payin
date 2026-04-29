@@ -1,0 +1,46 @@
+appId: "com.crokenx.tumipaypayin"
+---
+- launchApp
+- waitForAnimationToEnd  # el toast desaparece solo después de unos segundos
+- assertVisible: "Transactions"
+
+- tapOn:
+    id: "tab-create-button"
+
+- waitForAnimationToEnd
+
+- assertVisible: "Create Payment"
+
+- tapOn:
+    id: "input-amount"
+- inputText: "500"
+
+- tapOn:
+    id: "input-payment-method"
+- inputText: "credit_card"
+
+- tapOn:
+    id: "input-description"
+- inputText: "Test transaction from Maestro"
+
+# Dismiss keyboard by tapping static title
+- tapOn:
+    text: "Create Payment"
+
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "btn-create-payment"
+
+# Handle success alert
+- assertVisible: "PayIn created successfully!"
+- tapOn: "OK"
+
+- waitForAnimationToEnd
+
+# Verify we're back on Transactions screen
+- tapOn:
+    id: "tab-transactions-button"
+
+- assertVisible: "Transactions"
+- assertVisible: ".*500.*"

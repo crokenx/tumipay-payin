@@ -72,6 +72,7 @@ const TabNavigator = () => {
         name="List"
         component={PayInNavigator}
         options={{
+            tabBarButtonTestID: 'tab-transactions-button',
           tabBarLabel: 'Transactions',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list" color={color} size={size} />
@@ -83,6 +84,7 @@ const TabNavigator = () => {
         component={CreatePayInScreen}
         options={{
           tabBarLabel: 'Create',
+          tabBarButtonTestID: 'tab-create-button',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle" color={color} size={size} />
           ),

@@ -262,7 +262,109 @@ npm run format     # Format with Prettier
 - **Unit Tests**: Use cases, utilities, error handlers
 - **Component Tests**: Screen and component rendering with React Testing Library
 - **Integration Tests**: Store + API adapter interactions
-- **End-to-End**: Navigation flows
+- **End-to-End**: Navigation flows with Maestro
+
+### End-to-End Testing with Maestro
+
+Maestro is used for mobile UI testing and automation to verify complete user workflows across the app.
+
+#### Setup & Installation
+
+1. **Install Maestro CLI**:
+   ```bash
+   curl -Ls "https://get.maestro.mobile.dev" | bash
+   ```
+
+2. **Add Maestro to your PATH** (if not already done):
+   ```bash
+   export PATH="$PATH:~/.maestro/bin"
+   ```
+
+3. **Verify installation**:
+   ```bash
+   maestro --version
+   ```
+
+#### Running E2E Tests
+
+1. **Start the app on an emulator or device**:
+   ```bash
+   npm start  # or npx expo start
+   ```
+
+2. **Run all Maestro flows**:
+   ```bash
+   maestro test maestro/
+   ```
+
+3. **Run a specific test**:
+   ```bash
+   maestro test maestro/create_transaction.yaml
+   maestro test maestro/home.yaml
+   ```
+
+4. **Run with verbose output**:
+   ```bash
+   maestro test --debug maestro/create_transaction.yaml
+   ```
+
+#### Test Flows
+
+##### 1. **Create Transaction Flow** (`create_transaction.yaml`)
+Tests the complete transaction creation workflow:
+- Launches the app and verifies home screen loads
+- Navigates to Create Transaction screen
+- Fills in transaction form:
+  - Customer ID: `cust-123`
+  - Amount: `500`
+  - Currency: `USD`
+  - Payment Method: `credit_card`
+  - Description: `Test transaction from Maestro`
+- Submits the form
+- Verifies success and transaction appears in list
+- Navigates back home and confirms persistence
+
+**What it validates**:
+- ✅ Form field inputs work correctly
+- ✅ Form submission succeeds
+- ✅ Transaction data persists
+- ✅ UI updates after successful creation
+- ✅ Navigation flows properly
+
+##### 2. **Home Screen Flow** (`home.yaml`)
+Basic smoke test for the home screen:
+- Launches app
+- Verifies Transactions list is visible
+- Confirms app loads without errors
+
+#### Key Features of Maestro Tests
+
+- **No coding required**: YAML-based test definitions
+- **Cross-platform**: Run same tests on iOS and Android
+- **Visual testing**: Finds UI elements by text, coordinates, or accessibility labels
+- **Waits & retries**: Automatically handles async operations
+- **Screenshot on failure**: Captures state when tests fail
+
+#### Debugging Failed Tests
+
+If a test fails:
+
+1. **Check test output** for which step failed
+2. **Review app UI** - verify element text/layout matches test expectations
+3. **Use `--debug` flag** for step-by-step execution
+4. **Update selectors** in YAML if UI elements changed
+5. **Verify element accessibility** - ensure buttons/inputs are visible and tappable
+
+#### CI/CD Integration
+
+Add to your CI/CD pipeline to run E2E tests automatically:
+
+```yaml
+# Example GitHub Actions
+- name: Run Maestro Tests
+  run: |
+    maestro test maestro/
+```
 
 ### TypeScript
 - Strict mode enabled

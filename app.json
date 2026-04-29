@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.crokenx.tumipaypayin"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +22,17 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.crokenx.tumipaypayin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5a440218-521a-4ead-baaf-776451d8c66f"
+      }
+    },
+    "owner": "crokenx"
   }
 }
