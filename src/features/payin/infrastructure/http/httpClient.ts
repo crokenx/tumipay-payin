@@ -4,11 +4,13 @@ import axios, {
   AxiosResponse,
   AxiosError,
 } from 'axios';
+import { ENV } from '../../../../config/env';
+import { authTokenStorage } from '../../../../shared/storage/authTokenStorage';
 
 export class HttpClient {
   private instance: AxiosInstance;
 
-  constructor(baseURL: string = 'https://api.tumipay.com/v1') {
+  constructor(baseURL: string = ENV.API_BASE_URL) {
     this.instance = axios.create({
       baseURL,
       timeout: 10000,
@@ -19,9 +21,9 @@ export class HttpClient {
 
     // Request interceptor
     this.instance.interceptors.request.use(
-      (config) => {
+      async (config) => {
         // Add auth token if available
-        const token = this.getAuthToken();
+        const token = await this.getAuthToken();
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -41,9 +43,8 @@ export class HttpClient {
     );
   }
 
-  private getAuthToken(): string | null {
-    // TODO: Implement auth token retrieval from secure storage
-    return null;
+  private getAuthToken(): Promise<string | null> {
+    return authTokenStorage.getAccessToken();
   }
 
   async get<T>(

@@ -7,6 +7,14 @@ jest.mock('axios', () => ({
   },
 }));
 
+const mockAuthTokenStorage = {
+  getAccessToken: jest.fn(),
+};
+
+jest.mock('../../src/shared/storage/authTokenStorage', () => ({
+  authTokenStorage: mockAuthTokenStorage,
+}));
+
 type MockAxiosInstance = {
   defaults: {
     headers: {
@@ -64,6 +72,7 @@ describe('HttpClient', () => {
 
   beforeEach(() => {
     mockInstance = createMockAxiosInstance();
+    mockAuthTokenStorage.getAccessToken.mockResolvedValue(null);
     jest.clearAllMocks();
   });
 
@@ -106,27 +115,28 @@ describe('HttpClient', () => {
     );
   });
 
-  test('request interceptor returns config unchanged when there is no auth token', () => {
+  test('request interceptor returns config unchanged when there is no auth token', async () => {
     loadHttpClient(mockInstance);
     const [onRequest] = mockInstance.interceptors.request.use.mock.calls[0];
     const config = { headers: {} };
 
-    expect(onRequest(config)).toBe(config);
+    await expect(onRequest(config)).resolves.toBe(config);
     expect(config.headers).toEqual({});
   });
 
-  test('request interceptor adds bearer token when one is available', () => {
+  test('request interceptor adds bearer token when one is available', async () => {
+    mockAuthTokenStorage.getAccessToken.mockResolvedValue('secure-token');
     const { HttpClient } = loadHttpClient(mockInstance);
-    const client = new HttpClient('https://api.example.com');
-    (client as any).getAuthToken = jest.fn(() => 'secure-token');
+    new HttpClient('https://api.example.com');
 
     const [onRequest] = mockInstance.interceptors.request.use.mock.calls[1];
     const config = { headers: {} };
 
-    expect(onRequest(config)).toBe(config);
+    await expect(onRequest(config)).resolves.toBe(config);
     expect(config.headers).toEqual({
       Authorization: 'Bearer secure-token',
     });
+    expect(mockAuthTokenStorage.getAccessToken).toHaveBeenCalledTimes(1);
   });
 
   test('request interceptor rejects request errors', async () => {

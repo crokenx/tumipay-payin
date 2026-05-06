@@ -7,14 +7,13 @@ import {
 } from '../../domain/entities/PayIn';
 import { httpClient } from '../http/httpClient';
 import { ApiError } from '../../../../shared';
+import { PAYIN_ENDPOINTS } from './payInEndpoints';
 
 export class PayInApiAdapter implements IPayInRepository {
-  private readonly basePath = '/payins';
-
   async createPayIn(request: CreatePayInRequest): Promise<CreatePayInResponse> {
     try {
       const response = await httpClient.post<CreatePayInResponse>(
-        this.basePath,
+        PAYIN_ENDPOINTS.base,
         request
       );
       return response.data;
@@ -25,7 +24,7 @@ export class PayInApiAdapter implements IPayInRepository {
 
   async getPayInById(id: string): Promise<PayIn> {
     try {
-      const response = await httpClient.get<PayIn>(`${this.basePath}/${id}`);
+      const response = await httpClient.get<PayIn>(PAYIN_ENDPOINTS.byId(id));
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -36,7 +35,7 @@ export class PayInApiAdapter implements IPayInRepository {
     console.log(`API Adapter: Listing PayIns for customer_id=${customerId}`);
     try {
       const response = await httpClient.get<{ data: PayIn[] }>(
-        `${this.basePath}?customer_id=${customerId}`
+        PAYIN_ENDPOINTS.listByCustomer(customerId)
       );
       return response.data.data;
     } catch (error) {

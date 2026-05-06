@@ -1,14 +1,11 @@
 // PayIn Zustand Store - State Management
 import { create } from 'zustand';
 import { CreatePayInRequest, CreatePayInUseCase, GetPayInByIdUseCase, ListPayInsUseCase, PayIn, PayInApiAdapter, PayInMockAdapter } from '../..';
-
-// Toggle between mock and real API
-// Set to false to use real API when backend is ready
-const USE_MOCK_API = true; // Change to false to use real API
+import { ENV } from '../../../../config/env';
 
 // Get repository instance
 const getRepository = () => {
-  if (USE_MOCK_API) {
+  if (ENV.USE_MOCK_API) {
     console.log('🔄 Using Mock API Adapter');
     return new PayInMockAdapter();
   }

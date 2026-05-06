@@ -13,3 +13,6 @@ export {
   getErrorMessage,
 } from './utils/errorHandler';
 export type { ErrorResponse } from './utils/errorHandler';
+
+// Storage
+export { authTokenStorage } from './storage/authTokenStorage';

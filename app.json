@@ -33,6 +33,9 @@
         "projectId": "5a440218-521a-4ead-baaf-776451d8c66f"
       }
     },
-    "owner": "crokenx"
+    "owner": "crokenx",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

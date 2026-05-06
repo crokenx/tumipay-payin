@@ -160,12 +160,12 @@ GET /v1/payins?customer_id={id}
 
 ### Base URL
 - Default: `https://api.tumipay.com/v1`
-- Configurable via `HttpClient` constructor
+- Configurable through `EXPO_PUBLIC_API_BASE_URL` or the `HttpClient` constructor
 
 ### Error Handling
 - HTTP errors mapped to `ApiError` with status codes
 - Network timeouts (10s default)
-- Auth token support (placeholder for secure storage)
+- Bearer token support through `expo-secure-store` (`authTokenStorage`) and the HTTP request interceptor
 
 ## State Management
 
@@ -195,10 +195,13 @@ Switch between mock and real API via environment variable:
 
 ```bash
 # Use mock adapter (default for development)
-REACT_APP_USE_MOCK_API=true npx expo start
+EXPO_PUBLIC_USE_MOCK_API=true npx expo start
 
 # Use real API
-REACT_APP_USE_MOCK_API=false npx expo start
+EXPO_PUBLIC_USE_MOCK_API=false npx expo start
+
+# Use a custom API base URL
+EXPO_PUBLIC_API_BASE_URL=https://staging-api.tumipay.com/v1 npx expo start
 ```
 
 ### Mock Data
@@ -209,36 +212,36 @@ The `PayInMockAdapter` includes sample transactions simulating network delays:
 
 ## Assumptions
 
-1. **Authentication**: Simple bearer token (not implemented, placeholder in HttpClient)
+1. **Authentication**: Bearer tokens are read from platform secure storage before requests
 2. **Backend**: REST API with standard request/response format
 3. **Timestamps**: ISO 8601 format for all date/time fields
 4. **Currency**: ISO 4217 standard (USD, EUR, etc.)
 5. **User Context**: Single logged-in user with fixed customer ID (cust-123 for demo)
 6. **Validation**: Client-side form validation before API submission
 
-## Identified Risks & Mitigations
+## Identified Risks & Mitigation Options
 
 ### Risks
 
 1. **Network Connectivity**
    - Risk: API calls fail due to poor connection
-   - Mitigation: Offline-first cache, retry logic, clear error messages
+   - Possible mitigation: Offline-first cache, retry logic, clear error messages
 
 2. **Token Expiration**
    - Risk: Auth token expires during user session
-   - Mitigation: Implement token refresh flow in HttpClient interceptors
+   - Possible mitigation: Implement token refresh flow in HttpClient interceptors
 
 3. **Race Conditions**
    - Risk: Multiple simultaneous API requests cause state inconsistencies
-   - Mitigation: Loading state prevents concurrent submissions, Zustand prevents duplicate actions
+   - Implemented mitigation: Loading state prevents concurrent submissions, Zustand manages centralized async state
 
 4. **API Response Inconsistency**
    - Risk: Backend response format changes
-   - Mitigation: Strong TypeScript types, API versioning (/v1)
+   - Implemented mitigation: Strong TypeScript types, API versioning (/v1)
 
 5. **Large Transaction Lists**
    - Risk: Performance degradation with many items
-   - Mitigation: Implement pagination in API, virtualized list rendering
+   - Possible mitigation: Implement pagination in API; current UI uses virtualized list rendering with `FlatList`
 
 ### Current Mitigations Implemented
 
@@ -311,7 +314,7 @@ Use `--no-watchman` if Watchman has local permission issues or is not installed.
 - `__tests__/infrastructure`: API adapters and HTTP client behavior
 - `__tests__/screens`: screen rendering, form validation, loading/error/empty states, navigation callbacks
 - `__tests__/shared`: shared utilities such as error handling
-- Root component tests: reusable presentation components such as `PayInCard` and `PayInStatusBadge`
+- `__tests__/components`: reusable presentation components such as `PayInCard` and `PayInStatusBadge`
 
 #### Test coverage result
 
